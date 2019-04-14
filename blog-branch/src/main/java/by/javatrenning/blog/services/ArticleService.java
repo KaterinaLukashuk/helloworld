@@ -41,8 +41,7 @@ public class ArticleService {
 
     public Article getArticle(int id)
     {
-        Article article = articleRepo.findById(id);;
-        return article;
+        return articleRepo.findById(id);
     }
 
     public Iterable<Article> getUsersArticles(User user)
