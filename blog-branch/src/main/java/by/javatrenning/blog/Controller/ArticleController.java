@@ -5,6 +5,8 @@ import by.javatrenning.blog.repos.ArticleRepository;
 
 import by.javatrenning.blog.repos.CommentRepository;
 import by.javatrenning.blog.repos.TagRepository;
+import by.javatrenning.blog.services.ArticleService;
+import by.javatrenning.blog.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,20 +18,28 @@ import java.util.Map;
 
 @Controller
 public class ArticleController {
-    @Autowired
-    private ArticleRepository articleRepo;
-    @Autowired
-    private CommentRepository commentRepo;
+//    @Autowired
+//    private ArticleRepository articleRepo;
+//    @Autowired
+//    private CommentRepository commentRepo;
+
     @Autowired
     private TagRepository tagRepo;
+
+
+    @Autowired
+    ArticleService articleServ;
+
+    @Autowired
+    CommentService commentServ;
 
     @GetMapping("/page")
     public String articles(Map<String, Object> model) {
         model.put("page", "i hate myself");
-        Iterable<Article> articles = articleRepo.findAll();
+    //    Iterable<Article> articles = articleRepo.findAll();
 
 
-        model.put("articles", articles);
+        model.put("articles", articleServ.showArticles());
         return "page";
     }
 
@@ -48,9 +58,9 @@ public class ArticleController {
                       @RequestParam Status status,
                       Map<String, Object> model) {
         Article article = new Article(title, text, status, user);
-        articleRepo.save(article);
-        Iterable<Article> articles = articleRepo.findAll();
-        model.put("articles", articles);
+      //  articleRepo.save(article);
+     //   Iterable<Article> articles = articleRepo.findAll();
+        model.put("articles", articleServ.addArticle(article));
         return "redirect:/page";
     }
 
@@ -58,11 +68,11 @@ public class ArticleController {
     public String showArticle(
             @PathVariable(value = "id") int id,
             Map<String, Object> model) {
-        Article article = articleRepo.findById(id);
+        Article article = articleServ.getArticle(id);
         model.put("article", article);
 
-        Iterable<Comment> comments = commentRepo.findByArticle(article);
-        model.put("articlecomments", comments);
+       // Iterable<Comment> comments = commentRepo.findByArticle(article);
+        model.put("articlecomments", commentServ.getArticleComments(article));
        // Iterable<Tag> tags = tagRepo.findAll();
         Iterable<Tag> tags = tagRepo.findByArticles(article);
         //Iterable<Tag> tags = tagRepo.findByTagId(1);
@@ -93,7 +103,8 @@ public class ArticleController {
         article.setText(text);
         article.setStatus(status);
         article.setUpdatedAt(new Date());
-        articleRepo.save(article);
+      //  articleRepo.save(article);
+        articleServ.addArticle(article);
         return "redirect:/article/" + article.getId();
     }
 
@@ -101,12 +112,12 @@ public class ArticleController {
     public String articleDelete(@PathVariable Article article,
                                 @PathVariable User user,
                                 Map<String, Object> model) {
-        articleRepo.delete(article);
+     //   articleRepo.delete(article);
         model.put("deletemsg", "Article '" + article.getTitle() + "' deleted");
 
         model.put("user", user);
-        Iterable<Article> articles = articleRepo.findByUser(user);
-        model.put("usersartcl", articles);
+    //    Iterable<Article> articles = articleRepo.findByUser(user);
+        model.put("usersartcl", articleServ.deleteArticle(article));
 
         return "userpage";
     }
@@ -117,7 +128,7 @@ public class ArticleController {
             Map<String, Object> model)
     {
         //use for search article by tag
-          Iterable<Article> articles = articleRepo.findByTags(tagRepo.findByTagId(1).get(0));
+    //      Iterable<Article> articles = articleRepo.findByTags(tagRepo.findByTagId(1).get(0));
         return "page";
     }
 }

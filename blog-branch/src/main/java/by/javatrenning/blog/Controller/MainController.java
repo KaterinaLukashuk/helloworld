@@ -5,6 +5,7 @@ import by.javatrenning.blog.data.Article;
 import by.javatrenning.blog.repos.ArticleRepository;
 import by.javatrenning.blog.data.User;
 import by.javatrenning.blog.repos.UserRepository;
+import by.javatrenning.blog.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,11 @@ import java.util.Map;
     public class MainController {
     @Autowired
     private UserRepository userRepo;
+//    @Autowired
+//    private ArticleRepository articleRepo;
+
     @Autowired
-    private ArticleRepository articleRepo;
+    ArticleService articleServ;
 
         @GetMapping("/")
         public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name,
@@ -63,8 +67,8 @@ import java.util.Map;
     public String add(@AuthenticationPrincipal User user,
                       Map<String, Object> model) {
             model.put("user", user);
-            Iterable<Article> articles = articleRepo.findByUser(user);
-            model.put("usersartcl", articles);
+           // Iterable<Article> articles = articleRepo.findByUser(user);
+            model.put("usersartcl", articleServ.getUsersArticles(user));
         return "userpage";
     }
 
