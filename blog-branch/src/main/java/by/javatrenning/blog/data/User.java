@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,11 +20,18 @@ public class User implements UserDetails {
     private boolean active;
 
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
-
+//    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+//    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+//    @Enumerated(EnumType.STRING)
+//    private Set<Role> roles;
+//    @OneToOne
+//    @CollectionTable(name = "user_role")
+//    @JoinColumn(name = "role_id" )
+////    @Enumerated(EnumType.STRING)
+//    String role = Role.USER.getName();
+//    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    UserRole role;
 
     private  String email;
     private String activationCode;
@@ -67,7 +75,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+
+      //  ArrayList<Role> roles = new ArrayList<Role>();
+        Set<Role> roles= new HashSet<>();
+        roles.add(Role.USER);
+        return roles;
     }
 
     public String getPassword() {
@@ -78,9 +90,9 @@ public class User implements UserDetails {
         return active;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
+//    public Set<Role> getRoles() {
+//        return roles;
+//    }
 
     public String getEmail() {
         return email;
@@ -106,9 +118,9 @@ public class User implements UserDetails {
         this.active = active;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+//    public void setRoles(Set<Role> roles) {
+//        this.roles = roles;
+//    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -132,5 +144,11 @@ public class User implements UserDetails {
         return username + " " + "e-mail: "+  email ;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
 
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 }

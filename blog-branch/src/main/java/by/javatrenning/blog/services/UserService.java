@@ -2,6 +2,7 @@ package by.javatrenning.blog.services;
 
 import by.javatrenning.blog.data.Role;
 import by.javatrenning.blog.data.User;
+import by.javatrenning.blog.data.UserRole;
 import by.javatrenning.blog.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,7 +36,8 @@ public class UserService implements UserDetailsService {
 
         user.setCreatedAt(new Date());
         user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
+      //  user.setRoles(Collections.singleton(Role.USER));
+        user.setRole(new UserRole(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
         userRepo.save(user);
 

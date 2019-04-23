@@ -24,8 +24,8 @@ public class Article {
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "article_tag",
-            joinColumns = { @JoinColumn(name = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "tagId") }
+            joinColumns = { @JoinColumn(name = "article_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
     )
     Set<Tag> tags;
 

@@ -1,0 +1,9 @@
+databaseChangeLog:
+
+    - changeSet:
+          id: 1
+          author: creator
+    - include:
+          file: db/migrations/create.sql
+    - include:
+          file: db/migrations/insert.sql

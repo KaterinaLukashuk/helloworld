@@ -37,15 +37,15 @@ public class ArticleService {
         commentServ.deleteComments(article);
         articleRepo.delete(article);
         return articleRepo.findAll();
-    }
-
-    public Article getArticle(int id)
-    {
-        return articleRepo.findById(id);
-    }
-
-    public Iterable<Article> getUsersArticles(User user)
-    {
-        return articleRepo.findByUser(user);
-    }
 }
+
+public Article getArticle(int id)
+        {
+        return articleRepo.findById(id);
+        }
+
+public Iterable<Article> getUsersArticles(User user)
+        {
+        return articleRepo.findByUser(user);
+        }
+        }
